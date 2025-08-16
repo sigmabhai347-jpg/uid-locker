@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Access Gate | Sigma</title>
+  <style>
+    body{font-family:system-ui,Arial,sans-serif;margin:0;display:grid;place-items:center;min-height:100vh;background:#0f172a;color:#e2e8f0}
+    .card{background:#111827;padding:28px;border-radius:18px;max-width:460px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+    h1{margin:0 0 8px;font-size:26px}
+    p{opacity:.9;line-height:1.45}
+    button, a.btn{display:block;width:100%;padding:12px 16px;margin-top:12px;border-radius:12px;border:0;cursor:pointer;font-weight:700;text-decoration:none;text-align:center}
+    button.primary{background:#22c55e;color:#06230f}
+    a.btn{background:#0ea5e9;color:#06230f}
+    small{opacity:.7}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Unlock Access</h1>
+    <p>कृपया नीचे *Agree & Continue* दबाएँ। आपके लिए एक <b>unique UID</b> बनेगा और तभी गेम खुलेगा।</p>
+    <button class="primary" id="agree">✅ Agree & Continue</button>
+    <a id="open" class="btn" href="#" style="display:none">🎮 Open Game</a>
+    <small id="uid"></small>
+  </div>
+
+  <script>
+    const STATION_LINK = "https://your-station-link.com"; // <- अपना link डालें
+    function genUID(){ return "BJS" + Math.floor(100000 + Math.random()*900000); }
+    document.getElementById("agree").onclick = function(){
+      const uid = genUID();
+      localStorage.setItem("bjs_uid", uid);
+      document.getElementById("uid").textContent = "Your UID: " + uid;
+      const a = document.getElementById("open");
+      a.href = STATION_LINK + "?uid=" + encodeURIComponent(uid);
+      a.style.display = "block";
+      this.style.display = "none";
+    };
+    // if already agreed
+    (function(){
+      const uid = localStorage.getItem("bjs_uid");
+      if(uid){
+        document.getElementById("uid").textContent = "Your UID: " + uid;
+        const a = document.getElementById("open");
+        a.href = STATION_LINK + "?uid=" + encodeURIComponent(uid);
+        a.style.display = "block";
+        document.getElementById("agree").style.display="none";
+      }
+    })();
+  </script>
+</body>
+</html>
